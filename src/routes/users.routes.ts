@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { parseISO } from 'date-fns';
 import CreateUserService from '../services/CreateUserService';
 import UpdateUserService from '../services/UpdateUserService';
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
 const userRouter = Router();
 
@@ -17,7 +18,7 @@ userRouter.post('/', async (request, response) => {
     return response.json(user);
 });
 
-userRouter.put('/', async (request, response) => {
+userRouter.put('/', ensureAuthenticated, async (request, response) => {
     const { username, birthday, cpf, address } = request.body();
     const { id } = request.user;
 
