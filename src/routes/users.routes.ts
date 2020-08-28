@@ -1,5 +1,7 @@
 import { Router } from 'express';
+import { parseISO } from 'date-fns';
 import CreateUserService from '../services/CreateUserService';
+import UpdateUserService from '../services/UpdateUserService';
 
 const userRouter = Router();
 
@@ -11,6 +13,25 @@ userRouter.post('/', async (request, response) => {
     const user = await createUser.execute({ email, password });
 
     delete user.password;
+
+    return response.json(user);
+});
+
+userRouter.put('/', async (request, response) => {
+    const { username, birthday, cpf, address } = request.body();
+    const { id } = request.user;
+
+    const updateUser = new UpdateUserService();
+
+    const parsedDate = parseISO(birthday);
+
+    const user = updateUser.execute({
+        username,
+        birthday: parsedDate,
+        cpf,
+        address,
+        id,
+    });
 
     return response.json(user);
 });
