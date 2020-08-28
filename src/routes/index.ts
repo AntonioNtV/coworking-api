@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import userRouter from './users.routes';
 
 const routes = Router();
 
@@ -8,15 +9,6 @@ routes.get('/', (request, response) => {
     });
 });
 
-routes.post('/users', (request, response) => {
-    const { name, email } = request.body;
-
-    const user = {
-        name,
-        email,
-    };
-
-    return response.json(user);
-});
+routes.use('/users', userRouter);
 
 export default routes;
