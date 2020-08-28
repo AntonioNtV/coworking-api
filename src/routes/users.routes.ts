@@ -19,20 +19,22 @@ userRouter.post('/', async (request, response) => {
 });
 
 userRouter.put('/', ensureAuthenticated, async (request, response) => {
-    const { username, birthday, cpf, address } = request.body();
+    const { username, birthday, cpf, address } = request.body;
     const { id } = request.user;
 
     const updateUser = new UpdateUserService();
 
     const parsedDate = parseISO(birthday);
 
-    const user = updateUser.execute({
+    const user = await updateUser.execute({
         username,
         birthday: parsedDate,
         cpf,
         address,
         id,
     });
+
+    delete user.password;
 
     return response.json(user);
 });
