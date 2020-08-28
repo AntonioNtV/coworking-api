@@ -1,13 +1,16 @@
 import { Router } from 'express';
-import { getRepository } from 'typeorm';
-import User from '../models/User';
+import CreateUserService from '../services/CreateUserService';
 
 const userRouter = Router();
 
 userRouter.post('/', (request, response) => {
     const { email, password } = request.body;
 
-    const userRepository = getRepository(User);
+    const createUser = new CreateUserService();
+
+    const user = createUser.execute({ email, password });
+
+    return response.json(user);
 });
 
 export default userRouter;
